@@ -1,0 +1,27 @@
+<!-- quiz/templates/quiz/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Activation Code</title>
+</head>
+<body>
+    Enter your activation code<br/>
+    <input id="activation-code-input" type="text" size="100"/><br/>
+    <input id="activation-code-submit" type="button" value="Enter"/>
+
+    <script>
+        document.querySelector('#activation-code-input').focus();
+        document.querySelector('#activation-code-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#activation-code-submit').click();
+            }
+        };
+
+        document.querySelector('#activation-code-submit').onclick = function(e) {
+            var quizName = document.querySelector('#activation-code-input').value;
+            window.location.pathname = '/quiz/' + quizName + '/';
+        };
+    </script>
+</body>
+</html>

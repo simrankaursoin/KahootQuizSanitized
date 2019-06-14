@@ -1,0 +1,47 @@
+<!-- quiz/templates/quiz/room.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Quiz</title>
+</head>
+<body>
+    <textarea id="quiz-log" cols="100" rows="20"></textarea><br/>
+    <input id="quiz-message-input" type="text" size="100"/><br/>
+    <input id="quiz-message-submit" type="button" value="Send"/>
+</body>
+<script>
+    var quizName = {{ room_name_json }};
+
+    var quizSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/quiz/' + quizName + '/');
+
+    quizSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        document.querySelector('#quiz-log').value += (message + '\n');
+    };
+
+    quizSocket.onclose = function(e) {
+        console.error('quiz socket closed unexpectedly');
+    };
+
+    document.querySelector('#quiz-message-input').focus();
+    document.querySelector('#quiz-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#quiz-message-submit').click();
+        }
+    };
+
+    document.querySelector('#quiz-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#quiz-message-input');
+        var message = messageInputDom.value;
+        quizSocket.send(JSON.stringify({
+            'message': message
+        }));
+
+        messageInputDom.value = '';
+    };
+</script>
+</html>
