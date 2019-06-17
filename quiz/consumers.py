@@ -6,8 +6,9 @@ import random
 
 
 class QuizConsumer(WebsocketConsumer):
+
     def release_new_question(self):
-        question = "new question: " + str(random.randint(1, 100))
+        question = "New question from TEACHER: " + str(random.randint(1, 100))
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
@@ -25,7 +26,6 @@ class QuizConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
-        self.release_new_question()
 
     def disconnect(self, close_code):
         # Leave room group
@@ -37,15 +37,18 @@ class QuizConsumer(WebsocketConsumer):
     # Receive message from WebSocket
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        if 'next_question' in text_data_json:
+            self.release_new_question()
         # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'quiz_message',
-                'message': message,
-            }
-        )
+        else:
+            message = text_data_json['message']
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                {
+                    'type': 'quiz_message',
+                    'message': message,
+                }
+            )
 
     # Receive message from room group
     def quiz_message(self, event):
@@ -63,27 +66,3 @@ class QuizConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
             'question': question,
         }))
-
-
-class TeacherConsumer(WebsocketConsumer):
-    def release_new_question(self):
-        question = "New_question_from_TEACHER: " + str(random.randint(1, 100))
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'question_message',
-                'question': question,
-            }
-        )
-
-    def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'teacher_%s' % self.room_name
-        # Join room group
-        async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name,
-            self.channel_name
-        )
-        self.accept()
-        self.release_new_question()
-
