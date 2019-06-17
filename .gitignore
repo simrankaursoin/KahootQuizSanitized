@@ -1,0 +1,30 @@
+venv
+*.pyc
+.env
+.vscode
+emails/*
+
+# artifacts
+*~
+*.*~
+\#requirements.txt#
+
+# pygraphviz
+all_models.png
+practice_models.png
+
+# db stuff
+*.sql*
+*.csv*
+*.ods*
+
+# flake8
+flake8output.txt
+
+# Coverage
+.coverage
+
+# IDE files
+.idea/
+
+.DS_Store
