@@ -5,6 +5,16 @@ import json
 
 
 class QuizConsumer(WebsocketConsumer):
+    def release_new_question(self):
+        question = "new_question!"
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                'type': 'question_message',
+                'question': question,
+            }
+        )
+
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'quiz_%s' % self.room_name
@@ -14,15 +24,8 @@ class QuizConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
+        self.release_new_question()
 
-        question = "new_question!"
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'question_message',
-                'question': question,
-            }
-        )
 
     def disconnect(self, close_code):
         # Leave room group
