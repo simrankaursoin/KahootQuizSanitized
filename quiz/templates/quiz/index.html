@@ -8,8 +8,7 @@
 <body>
     Enter your activation code<br/>
     <input id="activation-code-input" type="text" size="100"/><br/>
-    <input id="activation-code-submit" type="button" value="Enter"/>
-
+    <input id="activation-code-submit" type="button" value="Enter" required/>
     <script>
         document.querySelector('#activation-code-input').focus();
         document.querySelector('#activation-code-input').onkeyup = function(e) {
