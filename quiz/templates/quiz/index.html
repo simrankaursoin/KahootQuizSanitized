@@ -8,7 +8,8 @@
 <body>
     Enter your activation code<br/>
     <input id="activation-code-input" type="text" size="100"/><br/>
-    <input id="activation-code-submit" type="button" value="Enter" required/>
+    <input id="activation-code-submit" type="button" value="Enter"/>
+    <input type="checkbox" id="teacher" value="Teacher"> I am a teacher<br>
     <script>
         document.querySelector('#activation-code-input').focus();
         document.querySelector('#activation-code-input').onkeyup = function(e) {
@@ -19,7 +20,15 @@
 
         document.querySelector('#activation-code-submit').onclick = function(e) {
             var quizName = document.querySelector('#activation-code-input').value;
-            window.location.pathname = '/quiz/' + quizName + '/';
+            var teacher = document.getElementById('teacher').checked;
+            if (teacher) {
+                window.location.pathname = '/teachers/' + quizName + "/";
+                console.log("they're a teacher");
+            }
+
+            else {
+                window.location.pathname = '/quiz/' + quizName + '/';
+            }
         };
     </script>
 </body>
