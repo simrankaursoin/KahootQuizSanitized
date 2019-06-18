@@ -12,6 +12,7 @@
 <body>
     <textarea id="question" cols="100" rows="10"></textarea><br/>
     <input id="next_question" type="button" value="Release Next Question"/>
+    <input id="display_bargraph" type="button" value="Display Bar Graph"/>
 </body>
 <script>
     var quizSocket = new WebSocket(
@@ -43,7 +44,13 @@
         quizSocket.send(JSON.stringify({
             'next_question': next_question
         }));
+    };
 
+    document.querySelector('#display_bargraph').onclick = function(e) {
+        var display_bargraph = "display_bargraph";
+        quizSocket.send(JSON.stringify({
+            'display_bargraph': display_bargraph
+        }));
     };
 </script>
 

@@ -26,6 +26,9 @@ class QuizConsumer(WebsocketConsumer):
             }
         )
 
+    def display_bargraph(self):
+        print("display_bargraph")
+
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.user_name = self.scope['url_route']['kwargs']['user_name']
@@ -51,8 +54,11 @@ class QuizConsumer(WebsocketConsumer):
         if 'next_question' in text_data_json:
             self.release_new_question()
         # Send message to room group
+        elif 'display_bargraph' in text_data_json:
+            self.display_bargraph()
         else:
             message = text_data_json['message']
+            student_answer = message.split(":")[1].strip()
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
