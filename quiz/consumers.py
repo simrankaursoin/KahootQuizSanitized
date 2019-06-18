@@ -8,7 +8,7 @@ import random
 class QuizConsumer(WebsocketConsumer):
 
     def release_new_question(self):
-        question = "New question from TEACHER: " + str(random.randint(1, 100))
+        question = "New question from " + self.user_name + ": " + str(random.randint(1, 100))
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
@@ -19,6 +19,7 @@ class QuizConsumer(WebsocketConsumer):
 
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.user_name = self.scope['url_route']['kwargs']['user_name']
         self.room_group_name = 'quiz_%s' % self.room_name
         # Join room group
         async_to_sync(self.channel_layer.group_add)(

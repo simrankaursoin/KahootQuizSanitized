@@ -7,7 +7,9 @@
 </head>
 <body>
     Enter your activation code<br/>
-    <input id="activation-code-input" type="text" size="100"/><br/>
+    <input id="activation-code-input" type="text" size="100" required/><br/>
+    Enter your name<br/>
+    <input id="name-input" type="text" size="100" required/><br/>
     <input id="activation-code-submit" type="button" value="Enter"/>
     <input type="checkbox" id="teacher" value="Teacher"> I am a teacher<br>
     <script>
@@ -20,13 +22,14 @@
 
         document.querySelector('#activation-code-submit').onclick = function(e) {
             var quizName = document.querySelector('#activation-code-input').value;
+            var userName = document.querySelector('#name-input').value;
             var teacher = document.getElementById('teacher').checked;
             if (teacher) {
-                window.location.pathname = '/teachers/' + quizName + "/";
+                window.location.pathname = '/teachers/' + quizName + "-" + userName + "/";
             }
 
             else {
-                window.location.pathname = '/quiz/' + quizName + '/';
+                window.location.pathname = '/quiz/' + quizName + "-" + userName + '/';
             }
         };
     </script>

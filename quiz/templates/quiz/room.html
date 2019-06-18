@@ -5,29 +5,28 @@
     <meta charset="utf-8"/>
     <title>Quiz</title>
 </head>
+<script>
+    var quizName = {{ room_name_json }};
+    var userName = {{ user_name_json }}
+</script>
 <body>
-    <textarea id="question" cols="100" rows="5"></textarea><br/>
+    <textarea id="question" cols="100" rows="10"></textarea><br/>
     <input id="A" type="button" value="A"/>
     <input id="B" type="button" value="B"/>
     <input id="C" type="button" value="C"/>
     <input id="D" type="button" value="D"/>
 </body>
 <script>
-    var quizName = {{ room_name_json }};
 
     var quizSocket = new WebSocket(
         'ws://' + window.location.host +
-        '/ws/quiz/' + quizName + '/');
+        '/ws/quiz/' + quizName + "-" + userName + '/');
 
     quizSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
         if ('question' in data) {
             var question = data['question'];
             document.querySelector('#question').value += (question + '\n');
-        }
-        if ('message' in data) {
-            var message = data['message'];
-            document.querySelector('#question').value += (message + '\n');
         }
     };
 
@@ -38,27 +37,27 @@
     document.querySelector('#A').onclick = function(e) {
         var message = "A";
         quizSocket.send(JSON.stringify({
-            'message': message
+            'message': userName + ": " + message
         }));
 
     };
     document.querySelector('#B').onclick = function(e) {
         var message = "B";
         quizSocket.send(JSON.stringify({
-            'message': message
+            'message': userName + ": " + message
         }));
 
     };
     document.querySelector('#C').onclick = function(e) {
         var message = "C";
         quizSocket.send(JSON.stringify({
-            'message': message
+            'message': userName + ": " + message
         }));
     };
     document.querySelector('#D').onclick = function(e) {
         var message = "D";
         quizSocket.send(JSON.stringify({
-            'message': message
+            'message': userName + ": " + message
         }));
 
     };

@@ -5,16 +5,18 @@
     <meta charset="utf-8"/>
     <title>Teacher View</title>
 </head>
+<script>
+    var quizName = {{ room_name_json }};
+    var userName = {{ user_name_json }}
+</script>
 <body>
-    <textarea id="question" cols="100" rows="5"></textarea><br/>
+    <textarea id="question" cols="100" rows="10"></textarea><br/>
     <input id="next_question" type="button" value="Release Next Question"/>
 </body>
 <script>
-    var quizName = {{ room_name_json }};
-
     var quizSocket = new WebSocket(
         'ws://' + window.location.host +
-        '/ws/quiz/' + quizName + '/');
+        '/ws/quiz/' + quizName + "-" + userName + '/');
 
     quizSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
