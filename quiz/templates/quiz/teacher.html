@@ -22,11 +22,15 @@
         var data = JSON.parse(e.data);
         if ('question' in data) {
             var question = data['question'];
-            document.querySelector('#question').value += (question + '\n');
+            document.querySelector('#question').value += (question + '\n' + '\n');
         }
         if ('message' in data) {
             var message = data['message'];
             document.querySelector('#question').value += (message + '\n');
+        }
+        if ('name' in data) {
+            var name = data['name'];
+            document.querySelector('#question').value += (name + " has connected" + '\n' + '\n');
         }
     };
 

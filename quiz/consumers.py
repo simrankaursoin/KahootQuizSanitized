@@ -17,6 +17,15 @@ class QuizConsumer(WebsocketConsumer):
             }
         )
 
+    def send_connected_message(self):
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                'type': 'connected_message',
+                'name': self.user_name,
+            }
+        )
+
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.user_name = self.scope['url_route']['kwargs']['user_name']
@@ -27,6 +36,7 @@ class QuizConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
+        self.send_connected_message()
 
     def disconnect(self, close_code):
         # Leave room group
@@ -66,4 +76,12 @@ class QuizConsumer(WebsocketConsumer):
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'question': question,
+        }))
+
+    def connected_message(self, event):
+        name = event['name']
+
+        # Send message to WebSocket
+        self.send(text_data=json.dumps({
+            'name': name,
         }))

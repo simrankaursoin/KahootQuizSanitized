@@ -26,7 +26,7 @@
         var data = JSON.parse(e.data);
         if ('question' in data) {
             var question = data['question'];
-            document.querySelector('#question').value += (question + '\n');
+            document.querySelector('#question').value += (question + '\n' + '\n');
         }
     };
 
@@ -39,6 +39,7 @@
         quizSocket.send(JSON.stringify({
             'message': userName + ": " + message
         }));
+        alert("You submitted answer A");
 
     };
     document.querySelector('#B').onclick = function(e) {
@@ -46,6 +47,7 @@
         quizSocket.send(JSON.stringify({
             'message': userName + ": " + message
         }));
+        alert("You submitted answer B");
 
     };
     document.querySelector('#C').onclick = function(e) {
@@ -53,12 +55,14 @@
         quizSocket.send(JSON.stringify({
             'message': userName + ": " + message
         }));
+        alert("You submitted answer C");
     };
     document.querySelector('#D').onclick = function(e) {
         var message = "D";
         quizSocket.send(JSON.stringify({
             'message': userName + ": " + message
         }));
+        alert("You submitted answer D");
 
     };
 </script>
