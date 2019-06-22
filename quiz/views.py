@@ -21,3 +21,10 @@ def teacher_room(request, room_name, user_name):
         'room_name_json': mark_safe(json.dumps(room_name)),
         'user_name_json': mark_safe(json.dumps(user_name)),
     })
+
+
+def bargraph_display(request, room_name, user_name):
+    return render(request, 'quiz/bargraph.html', {
+        'room_name_json': mark_safe(json.dumps(room_name)),
+        'user_name_json': mark_safe(json.dumps(user_name)),
+    })

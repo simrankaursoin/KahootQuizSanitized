@@ -1,0 +1,22 @@
+<!-- quiz/templates/quiz/bargraph.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Bargraph</title>
+</head>
+<script>
+    var quizName = {{ room_name_json }};
+    var userName = {{ user_name_json }};
+</script>
+<p id="demo"></p>
+<script>
+
+var x = window.answers.toString();
+document.getElementById("demo").innerHTML = x;
+
+
+</script>
+
+
+</html>

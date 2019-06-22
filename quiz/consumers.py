@@ -18,6 +18,10 @@ class QuizConsumer(WebsocketConsumer):
         )
 
     def send_connected_message(self):
+        self.a = 0
+        self.b = 0
+        self.c = 0
+        self.d = 0
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
@@ -27,7 +31,13 @@ class QuizConsumer(WebsocketConsumer):
         )
 
     def display_bargraph(self):
-        print("display_bargraph")
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                'type': 'bargraph_message',
+                'answers': [self.a, self.b, self.c, self.d],
+            }
+        )
 
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -58,7 +68,6 @@ class QuizConsumer(WebsocketConsumer):
             self.display_bargraph()
         else:
             message = text_data_json['message']
-            student_answer = message.split(":")[1].strip()
             async_to_sync(self.channel_layer.group_send)(
                 self.room_group_name,
                 {
@@ -70,7 +79,16 @@ class QuizConsumer(WebsocketConsumer):
     # Receive message from room group
     def quiz_message(self, event):
         message = event['message']
+        student_answer = message.split(":")[1].strip()
 
+        if student_answer == 'A':
+            self.a += 1
+        elif student_answer == 'B':
+            self.b += 1
+        elif student_answer == 'C':
+            self.c += 1
+        elif student_answer == 'D':
+            self.d += 1
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'message': message,
@@ -90,4 +108,11 @@ class QuizConsumer(WebsocketConsumer):
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'name': name,
+        }))
+
+    def bargraph_message(self, event):
+        answers = event['answers']
+        # Send message to WebSocket
+        self.send(text_data=json.dumps({
+            'answers': answers
         }))

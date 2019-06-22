@@ -33,6 +33,11 @@
             var name = data['name'];
             document.querySelector('#question').value += (name + " has connected" + '\n');
         }
+        if ('answers' in data){
+            var answers = data['answers'];
+            var bargraph_window= window.open('bargraph');
+            bargraph_window.answers = answers;
+        }
     };
 
     quizSocket.onclose = function(e) {
